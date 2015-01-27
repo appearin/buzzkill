@@ -2,7 +2,6 @@
 /* global console, require */
 var AWS = require("aws-sdk");
 var util = require("util");
-var _ = require("underscore");
 
 var argv = require("yargs")
     .usage("$0 -c config.buzzkill.json")
@@ -15,7 +14,7 @@ var argv = require("yargs")
     .argv;
 
 var config = require(argv.configFile);
-var sqs = new AWS.SQS(_.extend(config.aws, config.sqs));
+var sqs = new AWS.SQS();
 var twilio = require("twilio")(config.twilio.accountSid, config.twilio.authToken);
 
 var receivedSqsMessage;
