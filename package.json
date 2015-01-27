@@ -1,0 +1,15 @@
+{
+  "name": "buzzkill",
+  "version": "1.0.0",
+  "description": "Send messages on an AWS SQS queue as SMS via Twilio",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.1.8",
+    "twilio": "^1.10.0",
+    "underscore": "^1.7.0",
+    "yargs": "^1.3.3"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  }
+}
