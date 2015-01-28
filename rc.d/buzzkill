@@ -20,7 +20,9 @@ command="/usr/sbin/daemon"
 command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_script} -c ${buzzkill_config} 2>&1 | /usr/bin/logger -p daemon.notice -t ${name}\""
 required_files="${buzzkill_script} ${buzzkill_config}"
 
+AWS_REGION=$(/usr/bin/fetch -qo - http://169.254.169.254/latest/meta-data/placement/availability-zone \
+    | /usr/bin/sed -e 's,[a-z]$,,')
 PATH=$PATH:/usr/local/sbin:/usr/local/bin
-export PATH
+export AWS_REGION PATH
 
 run_rc_command "$1"
