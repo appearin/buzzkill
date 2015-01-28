@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# PROVIDE: buzzkill
+# REQUIRE: DAEMON
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name=buzzkill
+rcvar=buzzkill_enable
+load_rc_config "${name}"
+
+# defaults are set such that buzzkill is automatically enabled
+: ${buzzkill_enable="YES"}
+: ${buzzkill_script=$(/bin/realpath $(/usr/bin/dirname "$0")/../buzzkill.js)}
+: ${buzzkill_config="/usr/local/etc/config.buzzkill.json"}
+
+pidfile="/var/run/buzzkill.pid"
+command="/usr/sbin/daemon"
+command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_script} -c ${buzzkill_config} 2>&1 | /usr/bin/logger -p daemon.notice -t ${name}\""
+required_files="${buzzkill_script} ${buzzkill_config}"
+
+PATH=$PATH:/usr/local/sbin:/usr/local/bin
+export PATH
+
+run_rc_command "$1"
