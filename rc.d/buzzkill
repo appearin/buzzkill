@@ -17,7 +17,7 @@ load_rc_config "${name}"
 
 pidfile="/var/run/buzzkill.pid"
 command="/usr/sbin/daemon"
-command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_script} -c ${buzzkill_config} 2>&1 | /usr/bin/logger -p daemon.notice -t ${name}\""
+command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_script} -c ${buzzkill_config}\""
 required_files="${buzzkill_script} ${buzzkill_config}"
 
 AWS_REGION=$(/usr/bin/fetch -qo - http://169.254.169.254/latest/meta-data/placement/availability-zone \
