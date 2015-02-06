@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.1.8",
+    "syslogh": "^1.1.2",
     "twilio": "^1.10.0",
     "yargs": "^1.3.3"
   },

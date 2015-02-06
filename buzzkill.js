@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-/* global console, require */
+/* global require */
 var AWS = require("aws-sdk");
+var syslogh = require("syslogh");
 var util = require("util");
 
 var argv = require("yargs")
@@ -12,6 +13,8 @@ var argv = require("yargs")
     })
     .help("h")
     .argv;
+
+syslogh.openlog("buzzkill", 0, syslogh.DAEMON);
 
 var config = require(argv.configFile);
 var sqs = new AWS.SQS();
@@ -27,7 +30,7 @@ var getNextMessage = function () {
 
 var logTwilioError = function (err) {
     if (err) {
-        console.error("error from twilio: %j", err);
+        syslogh.syslog(syslogh.ERR, "error from twilio: %j", err);
     }
 };
 
@@ -36,7 +39,7 @@ receivedSqsMessage = function (err, data) {
         throw new Error(util.format("error from sqs.receiveMessage: %j", err));
     }
     if (data.Messages) {
-        console.log("%d SQS messages received", !!data.Messages ? data.Messages.length : 0);
+        syslogh.syslog(syslogh.NOTICE, "%d SQS messages received", !!data.Messages ? data.Messages.length : 0);
         data.Messages.forEach(function (message) {
             sqs.deleteMessage({
                 QueueUrl: config.sqs.QueueUrl,
@@ -50,7 +53,7 @@ receivedSqsMessage = function (err, data) {
             try {
                 body = JSON.parse(message.Body);
             } catch (e) {
-                console.warn("Failed to parse SQS message body: %j", err);
+                syslogh.syslog(syslogh.WARNING, "Failed to parse SQS message body: %j", err);
             }
             config.twilio.recipients.forEach(function (recipient) {
                 twilio.messages.create({
@@ -65,6 +68,6 @@ receivedSqsMessage = function (err, data) {
     getNextMessage();
 };
 
-console.log("Ready, listening for messages on SQS queue %s", config.sqs.QueueUrl);
-console.log("recipients: %j", config.twilio.recipients);
+syslogh.syslog(syslogh.NOTICE, "Ready, listening for messages on SQS queue %s", config.sqs.QueueUrl);
+syslogh.syslog(syslogh.NOTICE, "recipients: %j", config.twilio.recipients);
 getNextMessage();
