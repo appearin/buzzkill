@@ -57,8 +57,7 @@ receivedSqsMessage = function (err, data) {
             }
             config.twilio.recipients.forEach(function (recipient) {
                 twilio.messages.create({
-                    body: util.format(config.twilio.bodyFormat,
-                        !!body ? body.Subject : "Unknown notification (unable to parse message subject)"),
+                    body: !!body ? body.Subject : "Unknown notification (unable to parse message subject)",
                     to: recipient,
                     from: config.twilio.sender
                 }, logTwilioError);
