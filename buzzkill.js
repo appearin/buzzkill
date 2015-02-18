@@ -51,13 +51,15 @@ receivedSqsMessage = function (err, data) {
             });
             var body;
             try {
-                body = JSON.parse(message.Body);
+                body = JSON.parse(message.Body).Subject || "Unknown message (no subject)";
             } catch (e) {
                 syslogh.syslog(syslogh.WARNING, "Failed to parse SQS message body: %j", err);
+                body = "Unknown message (unable to parse message subject)";
             }
+            syslogh.syslog(syslogh.NOTICE, "sending message: ", body);
             config.twilio.recipients.forEach(function (recipient) {
                 twilio.messages.create({
-                    body: !!body ? body.Subject : "Unknown notification (unable to parse message subject)",
+                    body: body,
                     to: recipient,
                     from: config.twilio.sender
                 }, logTwilioError);
