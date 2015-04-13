@@ -18,7 +18,7 @@ load_rc_config "${name}"
 
 pidfile="/var/run/buzzkill.pid"
 command="/usr/sbin/daemon"
-command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_dir}/buzzkill.js -c ${buzzkill_config}\""
+command_args="-cfr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_dir}/buzzkill.js -c ${buzzkill_config}\""
 required_dirs="${buzzkill_dir}"
 required_files="${buzzkill_config}"
 
