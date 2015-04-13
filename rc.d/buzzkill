@@ -6,8 +6,8 @@
 
 . /etc/rc.subr
 
-name=buzzkill
-rcvar=buzzkill_enable
+name="buzzkill"
+rcvar="buzzkill_enable"
 load_rc_config "${name}"
 
 # defaults are set such that buzzkill is automatically enabled
@@ -22,9 +22,9 @@ command_args="-cr -P ${pidfile} -u nobody /bin/sh -c \"${buzzkill_dir}/buzzkill.
 required_dirs="${buzzkill_dir}"
 required_files="${buzzkill_config}"
 
-AWS_REGION=$(/usr/bin/fetch -qo - http://169.254.169.254/latest/meta-data/placement/availability-zone \
-    | /usr/bin/sed -e 's,[a-z]$,,')
-PATH=$PATH:/usr/local/sbin:/usr/local/bin
+METADATA_URL="http://169.254.169.254/latest/meta-data"
+AWS_REGION=$(fetch -qo - "${METADATA_URL}/placement/availability-zone" | sed -e 's,[a-z]$,,')
+PATH="$PATH:/usr/local/sbin:/usr/local/bin"
 export AWS_REGION PATH
 
 run_rc_command "$1"
