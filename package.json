@@ -4,10 +4,10 @@
   "description": "Send messages on an AWS SQS queue as SMS via Twilio",
   "private": true,
   "dependencies": {
-    "aws-sdk": "^2.1.23",
-    "syslogh": "^1.1.2",
-    "twilio": "^1.11.1",
-    "yargs": "^3.7.1"
+    "aws-sdk": "^2.2.4",
+    "syslogh": "^1.2.1",
+    "twilio": "^2.4.0",
+    "yargs": "^3.26.0"
   },
   "engines": {
     "node": ">=0.10.0"
